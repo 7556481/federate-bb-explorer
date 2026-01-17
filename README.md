@@ -26,6 +26,26 @@ If you hit a 403 rate limit, the app automatically falls back to `/public/sample
 
 To view the full live repository tree, set `VITE_GITHUB_TOKEN` and reload the app so it can call the GitHub API without hitting rate limits.
 
+### Local clone fallback (no GitHub API)
+
+If GitHub API access is rate-limited, you can clone the repository locally and generate a tree file for the app to load without any API calls:
+
+```bash
+git clone https://github.com/CSA-FEDERATE/Proposed-BuildingBlocks.git
+cd Proposed-BuildingBlocks
+git ls-tree -r --name-only HEAD | python3 - <<'PY'
+import json
+import sys
+
+paths = [line.strip() for line in sys.stdin if line.strip()]
+tree = [{"path": path, "type": "blob", "sha": "local", "url": ""} for path in paths]
+payload = {"sha": "local", "truncated": False, "tree": tree}
+print(json.dumps(payload, indent=2))
+PY
+```
+
+Save the output as `public/sample-tree.json` in this project and reload the app. It will use the local tree as the fallback data source.
+
 ## Data source
 
 - Repository: https://github.com/CSA-FEDERATE/Proposed-BuildingBlocks
