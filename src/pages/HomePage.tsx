@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { DetailPanel } from "../components/DetailPanel";
 import { SearchBar } from "../components/SearchBar";
 import { TreeView } from "../components/TreeView";
@@ -11,7 +11,7 @@ export const HomePage = () => {
   const [filter, setFilter] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const meta: RepoMeta = getRepoMeta();
+  const meta: RepoMeta = useMemo(() => getRepoMeta(), []);
 
   useEffect(() => {
     const load = async () => {
