@@ -1,0 +1,136 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 24px 32px;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.header h1 {
+  margin: 0 0 8px;
+  font-size: 1.6rem;
+}
+
+.header p {
+  margin: 0;
+  color: #475569;
+}
+
+.main {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 24px;
+  padding: 24px 32px 40px;
+}
+
+.search-bar input {
+  width: 280px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #cbd5f5;
+  font-size: 0.95rem;
+}
+
+.tree-panel {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+  max-height: calc(100vh - 180px);
+  overflow: auto;
+}
+
+.tree-view {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tree-node__row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  padding: 6px 8px;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.tree-node__row:hover {
+  background: #f1f5f9;
+}
+
+.tree-node__toggle {
+  width: 16px;
+  display: inline-flex;
+  justify-content: center;
+  color: #64748b;
+}
+
+.tree-node__folder {
+  font-weight: 600;
+}
+
+.tree-node__file {
+  font-weight: 400;
+  color: #475569;
+}
+
+.tree-empty {
+  padding: 24px;
+  color: #64748b;
+}
+
+.detail-panel-wrapper {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+  max-height: calc(100vh - 180px);
+  overflow: auto;
+}
+
+.detail-panel h2 {
+  margin-top: 0;
+}
+
+.detail-panel__meta {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 16px;
+  color: #334155;
+}
+
+.detail-panel__snippet {
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 0.85rem;
+  white-space: pre-wrap;
+  margin-bottom: 16px;
+}
+
+.detail-panel__empty {
+  color: #64748b;
+  padding: 12px;
+}
+
+@media (max-width: 960px) {
+  .main {
+    grid-template-columns: 1fr;
+  }
+
+  .search-bar input {
+    width: 100%;
+  }
+}

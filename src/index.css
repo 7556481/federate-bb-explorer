@@ -1,0 +1,31 @@
+:root {
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  color: #0d1b2a;
+  background-color: #f8fafc;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+a {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.state {
+  padding: 48px;
+  font-size: 1.1rem;
+}
+
+.state--error {
+  color: #b91c1c;
+}
