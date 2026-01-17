@@ -30,6 +30,14 @@ export const fetchRepoTree = async (meta: RepoMeta = defaultMeta) => {
   return data;
 };
 
+const fetchFallbackTree = async (): Promise<RepoTreeResponse> => {
+  const response = await fetch("/sample-tree.json");
+  if (!response.ok) {
+    throw new Error("Failed to load fallback data.");
+  }
+  return (await response.json()) as RepoTreeResponse;
+};
+
 const ensureRoot = (nodes: BBNode[]): BBNode => {
   const root: BBNode = {
     id: "root",
@@ -99,7 +107,16 @@ const fetchReadmeSnippet = async (meta: RepoMeta, path: string) => {
 };
 
 export const buildGraph = async (meta: RepoMeta = defaultMeta): Promise<BBGraph> => {
-  const tree = await fetchRepoTree(meta);
+  let tree: RepoTreeResponse;
+  try {
+    tree = await fetchRepoTree(meta);
+  } catch (err) {
+    if (err instanceof Error && err.message.includes("403")) {
+      tree = await fetchFallbackTree();
+    } else {
+      throw err;
+    }
+  }
   const nodes = tree.tree.map((entry) => ({
     id: entry.path,
     name: entry.path.split("/").pop() ?? entry.path,

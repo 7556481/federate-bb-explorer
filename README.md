@@ -22,6 +22,8 @@ GitHub API requests are subject to rate limits. To increase the limit, create a 
 VITE_GITHUB_TOKEN=your_token_here
 ```
 
+If you hit a 403 rate limit, the app automatically falls back to `/public/sample-tree.json` so the UI still renders. Replace that file with a newer sample if you want different offline data.
+
 ## Data source
 
 - Repository: https://github.com/CSA-FEDERATE/Proposed-BuildingBlocks

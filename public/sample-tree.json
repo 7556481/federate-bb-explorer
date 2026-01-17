@@ -1,0 +1,54 @@
+{
+  "sha": "sample-root",
+  "truncated": false,
+  "tree": [
+    {
+      "path": "BB-CEST",
+      "type": "tree",
+      "sha": "sample-cest",
+      "url": "https://api.github.com/repos/CSA-FEDERATE/Proposed-BuildingBlocks/git/trees/sample-cest"
+    },
+    {
+      "path": "BB-CEST/README.md",
+      "type": "blob",
+      "sha": "sample-cest-readme",
+      "url": "https://api.github.com/repos/CSA-FEDERATE/Proposed-BuildingBlocks/git/blobs/sample-cest-readme"
+    },
+    {
+      "path": "BB-EST",
+      "type": "tree",
+      "sha": "sample-est",
+      "url": "https://api.github.com/repos/CSA-FEDERATE/Proposed-BuildingBlocks/git/trees/sample-est"
+    },
+    {
+      "path": "BB-EST/README.md",
+      "type": "blob",
+      "sha": "sample-est-readme",
+      "url": "https://api.github.com/repos/CSA-FEDERATE/Proposed-BuildingBlocks/git/blobs/sample-est-readme"
+    },
+    {
+      "path": "BB-SC",
+      "type": "tree",
+      "sha": "sample-sc",
+      "url": "https://api.github.com/repos/CSA-FEDERATE/Proposed-BuildingBlocks/git/trees/sample-sc"
+    },
+    {
+      "path": "BB-SC/README.md",
+      "type": "blob",
+      "sha": "sample-sc-readme",
+      "url": "https://api.github.com/repos/CSA-FEDERATE/Proposed-BuildingBlocks/git/blobs/sample-sc-readme"
+    },
+    {
+      "path": "BB-SC/BB-SC-Example",
+      "type": "tree",
+      "sha": "sample-sc-example",
+      "url": "https://api.github.com/repos/CSA-FEDERATE/Proposed-BuildingBlocks/git/trees/sample-sc-example"
+    },
+    {
+      "path": "BB-SC/BB-SC-Example/README.md",
+      "type": "blob",
+      "sha": "sample-sc-example-readme",
+      "url": "https://api.github.com/repos/CSA-FEDERATE/Proposed-BuildingBlocks/git/blobs/sample-sc-example-readme"
+    }
+  ]
+}
