@@ -24,6 +24,8 @@ VITE_GITHUB_TOKEN=your_token_here
 
 If you hit a 403 rate limit, the app automatically falls back to `/public/sample-tree.json` so the UI still renders. Replace that file with a newer sample if you want different offline data.
 
+To view the full live repository tree, set `VITE_GITHUB_TOKEN` and reload the app so it can call the GitHub API without hitting rate limits.
+
 ## Data source
 
 - Repository: https://github.com/CSA-FEDERATE/Proposed-BuildingBlocks

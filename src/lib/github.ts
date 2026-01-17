@@ -108,11 +108,13 @@ const fetchReadmeSnippet = async (meta: RepoMeta, path: string) => {
 
 export const buildGraph = async (meta: RepoMeta = defaultMeta): Promise<BBGraph> => {
   let tree: RepoTreeResponse;
+  let fallbackUsed = false;
   try {
     tree = await fetchRepoTree(meta);
   } catch (err) {
     if (err instanceof Error && err.message.includes("403")) {
       tree = await fetchFallbackTree();
+      fallbackUsed = true;
     } else {
       throw err;
     }
@@ -136,7 +138,7 @@ export const buildGraph = async (meta: RepoMeta = defaultMeta): Promise<BBGraph>
   );
 
   const { nodes: flatNodes, edges } = flattenGraph(root);
-  return { nodes: flatNodes, edges, root };
+  return { nodes: flatNodes, edges, root, fallbackUsed };
 };
 
 export const getRepoMeta = (): RepoMeta => ({ ...defaultMeta });

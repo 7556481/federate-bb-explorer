@@ -55,6 +55,12 @@ export const HomePage = () => {
         </div>
         <SearchBar value={filter} onChange={setFilter} />
       </header>
+      {graph.fallbackUsed && (
+        <div className="banner">
+          Using fallback sample data because GitHub API access was rate-limited. Set{" "}
+          <code>VITE_GITHUB_TOKEN</code> to load the full repository tree.
+        </div>
+      )}
       <main className="main">
         <section className="tree-panel">
           <TreeView root={graph.root} filter={filter} onSelect={setSelected} />

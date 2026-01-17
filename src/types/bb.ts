@@ -31,6 +31,7 @@ export interface BBGraph {
   nodes: BBNode[];
   edges: BBEdge[];
   root: BBNode;
+  fallbackUsed?: boolean;
 }
 
 export interface RepoMeta {

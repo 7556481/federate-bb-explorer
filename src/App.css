@@ -30,6 +30,22 @@
   padding: 24px 32px 40px;
 }
 
+.banner {
+  margin: 0 32px 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #fff5e6;
+  border: 1px solid #ffd5a3;
+  color: #6b3d00;
+  font-size: 0.9rem;
+}
+
+.banner code {
+  background: rgba(107, 61, 0, 0.1);
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+
 .search-bar input {
   width: 280px;
   padding: 10px 12px;
