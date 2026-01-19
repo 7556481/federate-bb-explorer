@@ -51,6 +51,12 @@ Save the output as `public/sample-tree.json` in this project and reload the app.
 - Repository: https://github.com/CSA-FEDERATE/Proposed-BuildingBlocks
 - API: `GET /repos/{owner}/{repo}/git/trees/{branch}?recursive=1`
 
+## MVP acceptance criteria
+
+1. The visualization updates when the GitHub repository updates.
+2. Do not hardcode BB names/tags/categories because they may change.
+3. Use a stable update pipeline (e.g., GitHub Actions to prebuild data or caching) to avoid API rate-limit issues.
+
 ## Updating data
 
 The app loads data at runtime from GitHub. No manual regeneration is required. If you want to change the source, edit `src/lib/github.ts` (owner, repo, branch).
