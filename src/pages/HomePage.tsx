@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { DetailPanel } from "../components/DetailPanel";
+import { OverviewPanel } from "../components/OverviewPanel";
 import { SearchBar } from "../components/SearchBar";
 import { TreeView } from "../components/TreeView";
 import { buildGraph, getRepoMeta } from "../lib/github";
@@ -9,6 +10,7 @@ export const HomePage = () => {
   const [graph, setGraph] = useState<BBGraph | null>(null);
   const [selected, setSelected] = useState<BBNode | undefined>();
   const [filter, setFilter] = useState("");
+  const [view, setView] = useState<"overview" | "tree">("overview");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const meta: RepoMeta = useMemo(() => getRepoMeta(), []);
@@ -53,7 +55,25 @@ export const HomePage = () => {
           <h1>FEDERATE Building Block Explorer</h1>
           <p>Clickable overview of the FEDERATE Building Block landscape.</p>
         </div>
-        <SearchBar value={filter} onChange={setFilter} />
+        <div className="header__actions">
+          <div className="view-toggle" role="group" aria-label="View mode">
+            <button
+              type="button"
+              className={`view-toggle__button ${view === "overview" ? "is-active" : ""}`}
+              onClick={() => setView("overview")}
+            >
+              Overview
+            </button>
+            <button
+              type="button"
+              className={`view-toggle__button ${view === "tree" ? "is-active" : ""}`}
+              onClick={() => setView("tree")}
+            >
+              Tree
+            </button>
+          </div>
+          <SearchBar value={filter} onChange={setFilter} />
+        </div>
       </header>
       {graph.fallbackUsed && (
         <div className="banner">
@@ -63,7 +83,11 @@ export const HomePage = () => {
       )}
       <main className="main">
         <section className="tree-panel">
-          <TreeView root={graph.root} filter={filter} onSelect={setSelected} />
+          {view === "overview" ? (
+            <OverviewPanel root={graph.root} onSelect={setSelected} />
+          ) : (
+            <TreeView root={graph.root} filter={filter} onSelect={setSelected} />
+          )}
         </section>
         <aside className="detail-panel-wrapper">
           <DetailPanel node={selected} meta={meta} />
