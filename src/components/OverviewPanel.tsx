@@ -13,7 +13,9 @@ const countDescendants = (node: BBNode): number => {
 };
 
 export const OverviewPanel = ({ root, onSelect }: OverviewPanelProps) => {
-  const sections = root.children ?? [];
+  const sections = (root.children ?? [])
+    .filter((section) => section.type === "tree")
+    .filter((section) => !section.name.startsWith("."));
 
   if (sections.length === 0) {
     return <div className="overview-empty">No sections available.</div>;
