@@ -11,13 +11,18 @@ export const HomePage = () => {
   const [selected, setSelected] = useState<BBNode | undefined>();
   const [filter, setFilter] = useState("");
   const [view, setView] = useState<"overview" | "tree">("overview");
+  const [pendingTreeJump, setPendingTreeJump] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const meta: RepoMeta = useMemo(() => getRepoMeta(), []);
   const handleOverviewSelect = (node: BBNode) => {
     setSelected(node);
+    setPendingTreeJump(true);
+  };
+  const handleEnterTree = () => {
     setView("tree");
-    setFilter(node.name);
+    setPendingTreeJump(false);
+    setFilter("");
   };
   const expandedIds = useMemo(() => {
     if (!selected?.path) {
@@ -73,18 +78,29 @@ export const HomePage = () => {
             <button
               type="button"
               className={`view-toggle__button ${view === "overview" ? "is-active" : ""}`}
-              onClick={() => setView("overview")}
+              onClick={() => {
+                setView("overview");
+                setPendingTreeJump(false);
+              }}
             >
               Overview
             </button>
             <button
               type="button"
               className={`view-toggle__button ${view === "tree" ? "is-active" : ""}`}
-              onClick={() => setView("tree")}
+              onClick={() => {
+                setView("tree");
+                setPendingTreeJump(false);
+              }}
             >
               Tree
             </button>
           </div>
+          {view === "overview" && pendingTreeJump && (
+            <button type="button" className="view-toggle__button is-active" onClick={handleEnterTree}>
+              Enter Tree
+            </button>
+          )}
           <SearchBar value={filter} onChange={setFilter} />
         </div>
       </header>
