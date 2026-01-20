@@ -19,6 +19,14 @@ export const HomePage = () => {
     setView("tree");
     setFilter(node.name);
   };
+  const expandedIds = useMemo(() => {
+    if (!selected?.path) {
+      return new Set<string>();
+    }
+    const parts = selected.path.split("/");
+    const ids = parts.map((_, index) => parts.slice(0, index + 1).join("/"));
+    return new Set(ids);
+  }, [selected?.path]);
 
   useEffect(() => {
     const load = async () => {
@@ -91,7 +99,13 @@ export const HomePage = () => {
           {view === "overview" ? (
             <OverviewPanel root={graph.root} onSelect={handleOverviewSelect} />
           ) : (
-            <TreeView root={graph.root} filter={filter} onSelect={setSelected} />
+            <TreeView
+              root={graph.root}
+              filter={filter}
+              onSelect={setSelected}
+              selectedId={selected?.id}
+              expandedIds={expandedIds}
+            />
           )}
         </section>
         <aside className="detail-panel-wrapper">

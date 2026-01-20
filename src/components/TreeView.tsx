@@ -1,10 +1,12 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { BBNode } from "../types/bb";
 
 interface TreeViewProps {
   root: BBNode;
   onSelect: (node: BBNode) => void;
   filter: string;
+  selectedId?: string;
+  expandedIds?: Set<string>;
 }
 
 const matchesFilter = (node: BBNode, filter: string): boolean => {
@@ -32,19 +34,30 @@ const NodeRow = ({
   node,
   depth,
   onSelect,
+  selectedId,
+  expandedIds,
 }: {
   node: BBNode;
   depth: number;
   onSelect: (node: BBNode) => void;
+  selectedId?: string;
+  expandedIds?: Set<string>;
 }) => {
-  const [expanded, setExpanded] = useState(depth < 1);
+  const [expanded, setExpanded] = useState(depth < 1 || expandedIds?.has(node.id));
   const hasChildren = (node.children?.length ?? 0) > 0;
+  const isSelected = selectedId === node.id;
+
+  useEffect(() => {
+    if (expandedIds?.has(node.id)) {
+      setExpanded(true);
+    }
+  }, [expandedIds, node.id]);
 
   return (
     <div className="tree-node">
       <button
         type="button"
-        className="tree-node__row"
+        className={`tree-node__row ${isSelected ? "is-selected" : ""}`}
         onClick={() => onSelect(node)}
         style={{ paddingLeft: `${depth * 16}px` }}
       >
@@ -68,13 +81,20 @@ const NodeRow = ({
       </button>
       {expanded &&
         node.children?.map((child) => (
-          <NodeRow key={child.id} node={child} depth={depth + 1} onSelect={onSelect} />
+          <NodeRow
+            key={child.id}
+            node={child}
+            depth={depth + 1}
+            onSelect={onSelect}
+            selectedId={selectedId}
+            expandedIds={expandedIds}
+          />
         ))}
     </div>
   );
 };
 
-export const TreeView = ({ root, onSelect, filter }: TreeViewProps) => {
+export const TreeView = ({ root, onSelect, filter, selectedId, expandedIds }: TreeViewProps) => {
   const filtered = useMemo(() => filterTree(root, filter), [root, filter]);
 
   if (!filtered) {
@@ -84,7 +104,14 @@ export const TreeView = ({ root, onSelect, filter }: TreeViewProps) => {
   return (
     <div className="tree-view">
       {filtered.children?.map((child) => (
-        <NodeRow key={child.id} node={child} depth={0} onSelect={onSelect} />
+        <NodeRow
+          key={child.id}
+          node={child}
+          depth={0}
+          onSelect={onSelect}
+          selectedId={selectedId}
+          expandedIds={expandedIds}
+        />
       ))}
     </div>
   );

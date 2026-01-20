@@ -159,6 +159,11 @@
   background: #f3f8e6;
 }
 
+.tree-node__row.is-selected {
+  background: #e6f2c7;
+  border: 1px solid #b7d271;
+}
+
 .tree-node__toggle {
   width: 16px;
   display: inline-flex;
