@@ -14,6 +14,11 @@ export const HomePage = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const meta: RepoMeta = useMemo(() => getRepoMeta(), []);
+  const handleOverviewSelect = (node: BBNode) => {
+    setSelected(node);
+    setView("tree");
+    setFilter(node.name);
+  };
 
   useEffect(() => {
     const load = async () => {
@@ -84,7 +89,7 @@ export const HomePage = () => {
       <main className="main">
         <section className="tree-panel">
           {view === "overview" ? (
-            <OverviewPanel root={graph.root} onSelect={setSelected} />
+            <OverviewPanel root={graph.root} onSelect={handleOverviewSelect} />
           ) : (
             <TreeView root={graph.root} filter={filter} onSelect={setSelected} />
           )}

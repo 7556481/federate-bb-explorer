@@ -17,6 +17,16 @@ export const DetailPanel = ({ node, meta }: DetailPanelProps) => {
   const link = node.path
     ? `${meta.baseUrl}/tree/${meta.branch}/${node.path}`
     : meta.baseUrl;
+  const snippet = node.readmeSnippet
+    ? node.readmeSnippet
+        .split("\n")
+        .filter((line) => {
+          const trimmed = line.trim();
+          return !trimmed.startsWith("<!--") && !trimmed.startsWith("![");
+        })
+        .join("\n")
+        .trim()
+    : "";
 
   return (
     <div className="detail-panel">
@@ -29,9 +39,7 @@ export const DetailPanel = ({ node, meta }: DetailPanelProps) => {
           <strong>Type:</strong> {node.type}
         </div>
       </div>
-      {node.readmeSnippet && (
-        <pre className="detail-panel__snippet">{node.readmeSnippet}</pre>
-      )}
+      {snippet && <pre className="detail-panel__snippet">{snippet}</pre>}
       <a href={link} target="_blank" rel="noreferrer">
         View on GitHub
       </a>
