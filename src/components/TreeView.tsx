@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { BBNode } from "../types/bb";
 
 interface TreeViewProps {
@@ -48,10 +48,10 @@ const NodeRow = ({
   const isSelected = selectedId === node.id;
 
   useEffect(() => {
-    if (expandedIds?.has(node.id)) {
+    if (expandedIds?.has(node.id) || selectedId === node.id) {
       setExpanded(true);
     }
-  }, [expandedIds, node.id]);
+  }, [expandedIds, node.id, selectedId]);
 
   return (
     <div className="tree-node">
@@ -60,6 +60,7 @@ const NodeRow = ({
         className={`tree-node__row ${isSelected ? "is-selected" : ""}`}
         onClick={() => onSelect(node)}
         style={{ paddingLeft: `${depth * 16}px` }}
+        data-node-id={node.id}
       >
         {hasChildren ? (
           <span
@@ -96,13 +97,29 @@ const NodeRow = ({
 
 export const TreeView = ({ root, onSelect, filter, selectedId, expandedIds }: TreeViewProps) => {
   const filtered = useMemo(() => filterTree(root, filter), [root, filter]);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!selectedId || !containerRef.current) {
+      return;
+    }
+    const frame = requestAnimationFrame(() => {
+      const target = containerRef.current?.querySelector(
+        `[data-node-id="${CSS.escape(selectedId)}"]`
+      );
+      if (target instanceof HTMLElement) {
+        target.scrollIntoView({ block: "center", behavior: "smooth" });
+      }
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [selectedId, filtered]);
 
   if (!filtered) {
     return <div className="tree-empty">No matching nodes.</div>;
   }
 
   return (
-    <div className="tree-view">
+    <div className="tree-view" ref={containerRef}>
       {filtered.children?.map((child) => (
         <NodeRow
           key={child.id}
