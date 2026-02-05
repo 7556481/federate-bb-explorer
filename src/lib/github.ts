@@ -106,6 +106,20 @@ const fetchReadmeSnippet = async (meta: RepoMeta, path: string) => {
   return snippet;
 };
 
+const fetchReadmeContent = async (meta: RepoMeta, path: string) => {
+  const readmePath = path ? `${path}/README.md` : "README.md";
+  const url = `${apiBase}/repos/${meta.owner}/${meta.repo}/contents/${readmePath}`;
+  const response = await fetch(url, { headers: getHeaders() });
+  if (!response.ok) {
+    return undefined;
+  }
+  const data = (await response.json()) as { content?: string; encoding?: string };
+  if (!data.content || data.encoding !== "base64") {
+    return undefined;
+  }
+  return atob(data.content.replace(/\n/g, ""));
+};
+
 const extractFullName = (snippet?: string) => {
   if (!snippet) {
     return undefined;
@@ -117,6 +131,49 @@ const extractFullName = (snippet?: string) => {
   }
   const title = titleLine.replace(/^#+\s*/, "").trim();
   return title || undefined;
+};
+
+const parseTagMap = (content?: string) => {
+  if (!content) {
+    return new Map<string, string>();
+  }
+  const lines = content.split("\n");
+  const tagMap = new Map<string, string>();
+  let inSection = false;
+  let inTable = false;
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (trimmed.toLowerCase().includes("bb tags")) {
+      inSection = true;
+      continue;
+    }
+    if (trimmed.startsWith("## ") && inTable) {
+      break;
+    }
+    if (!inSection) {
+      continue;
+    }
+    if (trimmed.startsWith("|") && trimmed.includes("|")) {
+      inTable = true;
+      const cells = trimmed
+        .split("|")
+        .map((cell) => cell.trim())
+        .filter((cell) => cell.length > 0);
+      if (cells.length < 2 || cells[0].toLowerCase() === "tag") {
+        continue;
+      }
+      if (cells[0].replace(/-/g, "").length === 0) {
+        continue;
+      }
+      const [tag, description] = cells;
+      if (tag && description) {
+        tagMap.set(tag, description);
+      }
+    } else if (inTable && trimmed.length === 0) {
+      break;
+    }
+  }
+  return tagMap;
 };
 
 export const buildGraph = async (meta: RepoMeta = defaultMeta): Promise<BBGraph> => {
@@ -140,13 +197,15 @@ export const buildGraph = async (meta: RepoMeta = defaultMeta): Promise<BBGraph>
   }));
 
   const root = ensureRoot(nodes);
+  const rootReadme = await fetchReadmeContent(meta, "");
+  const tagMap = parseTagMap(rootReadme);
 
   const rootChildren = root.children ?? [];
   await Promise.all(
     rootChildren.slice(0, 40).map(async (child) => {
       if (child.type === "tree") {
         child.readmeSnippet = await fetchReadmeSnippet(meta, child.path);
-        child.fullName = extractFullName(child.readmeSnippet);
+        child.fullName = tagMap.get(child.name) ?? extractFullName(child.readmeSnippet);
       }
     })
   );
