@@ -31,6 +31,9 @@ export const OverviewPanel = ({ root, onSelect }: OverviewPanelProps) => {
           onClick={() => onSelect(section)}
         >
           <div className="overview-card__title">{section.name}</div>
+          {section.fullName && (
+            <div className="overview-card__subtitle">{section.fullName}</div>
+          )}
           <div className="overview-card__meta">
             {section.children?.length ?? 0} top items · {countDescendants(section)} total entries
           </div>

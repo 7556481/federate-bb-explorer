@@ -106,6 +106,19 @@ const fetchReadmeSnippet = async (meta: RepoMeta, path: string) => {
   return snippet;
 };
 
+const extractFullName = (snippet?: string) => {
+  if (!snippet) {
+    return undefined;
+  }
+  const lines = snippet.split("\n").map((line) => line.trim());
+  const titleLine = lines.find((line) => line.startsWith("#"));
+  if (!titleLine) {
+    return undefined;
+  }
+  const title = titleLine.replace(/^#+\s*/, "").trim();
+  return title || undefined;
+};
+
 export const buildGraph = async (meta: RepoMeta = defaultMeta): Promise<BBGraph> => {
   let tree: RepoTreeResponse;
   let fallbackUsed = false;
@@ -133,6 +146,7 @@ export const buildGraph = async (meta: RepoMeta = defaultMeta): Promise<BBGraph>
     rootChildren.slice(0, 40).map(async (child) => {
       if (child.type === "tree") {
         child.readmeSnippet = await fetchReadmeSnippet(meta, child.path);
+        child.fullName = extractFullName(child.readmeSnippet);
       }
     })
   );

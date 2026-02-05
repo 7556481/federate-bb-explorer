@@ -31,6 +31,7 @@ export const DetailPanel = ({ node, meta }: DetailPanelProps) => {
   return (
     <div className="detail-panel">
       <h2>{node.name}</h2>
+      {node.fullName && <div className="detail-panel__title">{node.fullName}</div>}
       <div className="detail-panel__meta">
         <div>
           <strong>Path:</strong> {node.path || "/"}
