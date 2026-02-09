@@ -1,0 +1,33 @@
+:root {
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  color: #102114;
+  background-color: #eaf2e4;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(180deg, #eaf2e4 0%, #f6f9f1 55%, #ffffff 100%);
+  min-height: 100vh;
+}
+
+a {
+  color: #2f6a33;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.state {
+  padding: 48px;
+  font-size: 1.1rem;
+}
+
+.state--error {
+  color: #b91c1c;
+}
