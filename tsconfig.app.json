@@ -10,6 +10,7 @@
     "skipLibCheck": true,
     "useDefineForClassFields": true,
     "isolatedModules": true
+    "types":["vite/client"]
   },
   "include": ["src"]
 }
